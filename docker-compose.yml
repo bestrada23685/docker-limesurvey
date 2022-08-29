@@ -1,0 +1,53 @@
+version: "3.8"
+services:
+  limesurvey-ce:
+    container_name: limesurvey-ce
+    image: bestrada23685/limesurvey-ce:3.28.23-220809
+    secrets:
+      - limesurvey_db_pass
+      - limesurvey_admin_pass
+    environment:
+      DB_HOST: postgres-db
+      DB_NAME: limesurvey_db
+      DB_USERNAME: bestrada23685
+      DB_PASSWORD_FILE: /run/secrets/limesurvey_db_pass
+      ADMIN_USERNAME: bestrada23685
+      ADMIN_PASSWORD_FILE: /run/secrets/limesurvey_admin_pass
+      ADMIN_FULLNAME: Bakneer Estrada
+      ADMIN_EMAIL: bakneer.estrada623@std.uni.edu.ni
+    ports:
+      - "8080:80"
+    depends_on:
+      - postgres-db
+  postgres-db:
+    container_name: postgres
+    image: postgres:12.12-bullseye
+    secrets:
+      - limesurvey_db_pass
+    environment:
+      POSTGRES_USER: bestrada23685
+      POSTGRES_PASSWORD_FILE: /run/secrets/limesurvey_db_pass
+      POSTGRES_DB: limesurvey_db
+    volumes:
+      - db-data:/var/lib/postgresql/data
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:latest
+    secrets:
+      - pgadmin_admin_pass
+    ports:
+      - "8081:80"
+    depends_on:
+      - postgres-db
+    environment:
+      PGADMIN_DEFAULT_EMAIL: bakneer.estrada623@std.uni.edu.ni
+      PGADMIN_DEFAULT_PASSWORD_FILE: /run/secrets/pgadmin_admin_pass
+volumes:
+  db-data:
+secrets:
+  limesurvey_db_pass:
+    file: ./secrets/limesurvey_db_pass.txt
+  limesurvey_admin_pass:
+    file: ./secrets/limesurvey_admin_pass.txt
+  pgadmin_admin_pass:
+    file: ./secrets/pgadmin_admin_pass.txt
