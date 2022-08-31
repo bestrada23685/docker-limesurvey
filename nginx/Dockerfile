@@ -203,7 +203,7 @@ RUN strip --verbose --strip-unneeded /usr/local/lib/*.so.* \
 
 FROM  debian:11.4-slim AS stage007-nginx-production
 
-COPY --from=stage006-nginx-tuneup    /usr/local/lib/libpcre2-8.so.0	/usr/local/lib/libpcre2-8.so.0
+COPY --from=stage006-nginx-tuneup   /usr/local/lib/libpcre2-8.so.0	/usr/local/lib/libpcre2-8.so.0
 COPY --from=stage006-nginx-tuneup	/usr/local/lib/libz.so.1	/usr/local/lib/libz.so.1
 COPY --from=stage006-nginx-tuneup	/usr/lib/x86_64-linux-gnu/libprofiler.so.0	/usr/lib/x86_64-linux-gnu/libprofiler.so.0 
 COPY --from=stage006-nginx-tuneup	/usr/lib/x86_64-linux-gnu/libunwind.so.8	/usr/lib/x86_64-linux-gnu/libunwind.so.8
@@ -261,8 +261,7 @@ COPY --from=stage006-nginx-tuneup	/etc/nginx/modules/ /etc/nginx/modules/
 COPY --chmod=444 config/nginx/ /etc/nginx/
 
 # symbolic link to enabled sites.
-RUN cd /etc/nginx/sites-enabled && \
-    ln -s ../sites-available/default.conf
+RUN ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/
 
 # configurar vínculos del enlazador dinámico en tiempo de ejecución
 RUN ldconfig -v
@@ -307,9 +306,9 @@ RUN touch /var/log/nginx/access.log \
     /var/log/modsec_audit.log \
     /opt/modsecurity/var/log/debug.log
 
-COPY --chown=www-data:www-data /config/assets/ /var/www/html/default/
+COPY --chown=www-data:www-data --chmod=750 /config/assets/ /var/www/html/default/
 
-EXPOSE 80 443
+EXPOSE 80/tcp 443/tcp
 
 STOPSIGNAL SIGTERM
 

@@ -127,7 +127,7 @@ COPY --from=stage002-tuneup-php /usr/local/lib/php/extensions/no-debug-non-zts-2
 # configurar vínculos del enlazador dinámico en tiempo de ejecución
 RUN ldconfig -v
 
-RUN mkdir -p /usr/local/var/log/ && \
+RUN mkdir --parents --verbose --mode=640 /usr/local/var/log/ && \
     touch /usr/local/var/log/php-fpm.log
 
 CMD [ "/usr/bin/supervisord","-n", "-c", "/etc/supervisor/supervisord.conf" ]
