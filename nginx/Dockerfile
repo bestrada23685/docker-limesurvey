@@ -1,28 +1,61 @@
-FROM  debian:11.4-slim AS stage001-download-prerequisites
+#
+# Código: bestrada23685/nginx.
+# País: Nicaragua.
+# Universidad: Universidad Nacional de Ingeniería (UNI).
+# Recinto: Recinto Universitario Simón Bolivar (RUSB).
+# Facultad: Facultad de Electrotecnia y Computación.
+# Carrera: Ingeniería en Computación.
+# Proyecto: Monografía / Análisis de competencias de investigación en universitarios del Programa Delfín - Capítulo Nicaragua.
+# Tutor: Will Johnny Flores Delgadillo.
+# Autor: Bakneer Nahúm Estrada Gutiérrez.
+# Carnet: 2006-23685.
+# Correo: bakneer.estrada623@std.uni.edu.ni 
+# Fecha: 01/09/2022.
+# URL: https://www.uni.edu.ni/#/somos 
+#      https://uol.uni.edu.ni/
+#
+# Descripción: Dockerfile multi etapa para NGINX.
+#
+#   - Nginx version: nginx/1.22.0 (Monograph).
+#   - built by gcc 10.2.1 20210110 (Debian 10.2.1-6).
+#   - OpenSSL 3.0.5 5 Jul 2022.
+#   - TLS SNI support enabled.
+#   - ModSecurity v3.0.7.
+#   - OWASP ModSecurity Core Rule Set (CRS) v3.3.2.
+#   - NGINX module for Brotli compression v1.0.0rc.
+#   - ModSecurity v3 Nginx Connector v1.0.3.
+#
+# GitHub URL: https://github.com/bestrada23685/docker-limesurvey/tree/master/nginx
+# DockerHub URL: https://hub.docker.com/repository/docker/bestrada23685/nginx 
+#
 
-RUN apt-get update && \
-    apt-get install --yes --no-install-recommends --no-install-suggests \
+ARG TAG=11.4-slim
+
+FROM  debian:$TAG AS stage001-download-dependencies
+
+RUN apt-get update \
+    && apt-get install --yes --no-install-recommends --no-install-suggests \
     ca-certificates \
     wget \
-    git && \
-    apt-get clean && \
-    rm --recursive --force /var/lib/apt/lists/*
+    git \
+    && apt-get clean \
+    && rm --recursive --force /var/lib/apt/lists/*
 
-RUN wget --tries=10  --directory-prefix=/tmp/ https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.40/pcre2-10.40.tar.gz && \
-    tar --gzip --extract --verbose --file=/tmp/pcre2-10.40.tar.gz --directory=/opt/ && \
-    rm --force /tmp/pcre2-10.40.tar.gz
+RUN wget --tries=10  --directory-prefix=/tmp/ https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.40/pcre2-10.40.tar.gz \
+    && tar --gzip --extract --verbose --file=/tmp/pcre2-10.40.tar.gz --directory=/opt/ \
+    && rm --force /tmp/pcre2-10.40.tar.gz
 
-RUN wget --tries=10 --directory-prefix=/tmp/ https://zlib.net/zlib-1.2.12.tar.gz && \
-    tar --gzip --extract --verbose --file=/tmp/zlib-1.2.12.tar.gz --directory=/opt/ && \
-    rm --force /tmp/zlib-1.2.12.tar.gz
+RUN wget --tries=10 --directory-prefix=/tmp/ https://zlib.net/zlib-1.2.12.tar.gz \
+    && tar --gzip --extract --verbose --file=/tmp/zlib-1.2.12.tar.gz --directory=/opt/ \
+    && rm --force /tmp/zlib-1.2.12.tar.gz
 
-RUN wget --tries=10 --directory-prefix=/tmp/ https://www.openssl.org/source/openssl-3.0.5.tar.gz && \
-    tar --gzip --extract --verbose --file=/tmp/openssl-3.0.5.tar.gz --directory=/opt/ && \
-    rm --force /tmp/openssl-3.0.5.tar.gz
+RUN wget --tries=10 --directory-prefix=/tmp/ https://www.openssl.org/source/openssl-3.0.5.tar.gz \
+    && tar --gzip --extract --verbose --file=/tmp/openssl-3.0.5.tar.gz --directory=/opt/ \
+    && rm --force /tmp/openssl-3.0.5.tar.gz
 
-RUN wget --tries=10 --directory-prefix=/tmp/ https://nginx.org/download/nginx-1.22.0.tar.gz && \
-    tar --gzip --extract --verbose --file=/tmp/nginx-1.22.0.tar.gz --directory=/opt/ && \
-    rm --force /tmp/nginx-1.22.0.tar.gz
+RUN wget --tries=10 --directory-prefix=/tmp/ https://nginx.org/download/nginx-1.22.0.tar.gz \
+    && tar --gzip --extract --verbose --file=/tmp/nginx-1.22.0.tar.gz --directory=/opt/ \
+    && rm --force /tmp/nginx-1.22.0.tar.gz
 
 RUN git clone https://github.com/google/ngx_brotli.git /opt/ngx_brotli/
 
@@ -32,10 +65,10 @@ RUN git clone --depth 1 -b v3/master --single-branch https://github.com/SpiderLa
 
 RUN git clone --depth 1 https://github.com/SpiderLabs/ModSecurity-nginx.git /opt/ModSecurity-nginx
 
-FROM stage001-download-prerequisites AS stage002-install-development-tools
+FROM stage001-download-dependencies AS stage002-install-development-tools
 
-RUN apt-get update && \
-    apt-get install --yes --no-install-recommends --no-install-suggests \
+RUN apt-get update \
+    && apt-get install --yes --no-install-recommends --no-install-suggests \
     uuid-dev \
     g++ \
     autoconf \
@@ -43,14 +76,14 @@ RUN apt-get update && \
     libtool \
     pkgconf \
     doxygen \
-    build-essential && \
-    apt-get clean && \
-    rm --recursive --force /var/lib/apt/lists/*
+    build-essential \
+    && apt-get clean \
+    && rm --recursive --force /var/lib/apt/lists/*
 
-FROM stage002-install-development-tools AS stage003-build-required-packages
+FROM stage002-install-development-tools AS stage003-build-common-dependencies
 
-RUN apt-get update && \
-    apt-get install --yes --no-install-recommends --no-install-suggests \
+RUN apt-get update \
+    && apt-get install --yes --no-install-recommends --no-install-suggests \
     libcurl4-openssl-dev \
     libgeoip-dev \
     liblmdb-dev \
@@ -58,75 +91,75 @@ RUN apt-get update && \
     libxml2-dev \ 
     libyajl-dev \
     liblua5.3-dev \
-    libmaxminddb-dev && \
-    apt-get clean && \
-    rm --recursive --force /var/lib/apt/lists/*
+    libmaxminddb-dev \
+    && apt-get clean \
+    && rm --recursive --force /var/lib/apt/lists/*
 
-RUN cd /opt/pcre2-10.40 && \
-    ./configure \
+RUN cd /opt/pcre2-10.40 \
+    && ./configure \
     --prefix=/usr/local \
-    --enable-jit && \
-    make -j$(nproc) clean && \
-    make -j$(nproc) --debug && \
-    make -j$(nproc) install
+    --enable-jit \
+    && make -j$(nproc) clean \
+    && make -j$(nproc) --debug \
+    && make -j$(nproc) install
 
-RUN cd /opt/zlib-1.2.12 && \
-    ./configure \
-    --prefix=/usr/local && \
-    make -j$(nproc) clean && \
-    make -j$(nproc) --debug && \
-    make -j$(nproc) install
+RUN cd /opt/zlib-1.2.12 \
+    && ./configure \
+    --prefix=/usr/local \
+    && make -j$(nproc) clean \
+    && make -j$(nproc) --debug \
+    && make -j$(nproc) install
 
-RUN cd /opt/openssl-3.0.5 && \
-    ./Configure \
+RUN cd /opt/openssl-3.0.5 \
+    && ./Configure \
     enable-fips \
     linux-x86_64 \
     --prefix=/usr/local/ssl \
     --openssldir=/usr/local/ssl \
-    '-Wl,--enable-new-dtags,-rpath,$(LIBRPATH)' && \
-    make -j$(nproc) clean && \
-    make -j$(nproc) --debug && \
-    make -j$(nproc) install_sw
-    
-FROM stage003-build-required-packages AS stage004-build-libmodsecurity
+    '-Wl,--enable-new-dtags,-rpath,$(LIBRPATH)' \
+    && make -j$(nproc) clean \
+    && make -j$(nproc) --debug \
+    && make -j$(nproc) install_sw
 
-RUN cd /opt/ssdeep/ && \
-    ./bootstrap && \
-    ./configure && \
-    make -j$(nproc) clean && \
-    make -j$(nproc) --debug && \
-    make -j$(nproc) install
-    
-RUN cd /opt/ModSecurity/ && \
-    git submodule init && \
-    git submodule update && \
-    ./build.sh && \
-    ./configure \ 
+FROM stage003-build-common-dependencies AS stage004-build-libmodsecurity
+
+RUN cd /opt/ssdeep/ \
+    && ./bootstrap \
+    && ./configure \
+    && make -j$(nproc) clean \
+    && make -j$(nproc) --debug \
+    && make -j$(nproc) install
+
+RUN cd /opt/ModSecurity/ \
+    && git submodule init \
+    && git submodule update \
+    && ./build.sh \
+    && ./configure \ 
     --with-yajl \
     --with-geoip \
     --with-maxmind \
     --with-lmdb \
     --with-lua \
     --with-ssdeep \
-    --with-pcre2 && \
-    make -j$(nproc) clean && \
-    make -j$(nproc) --debug && \
-    make -j$(nproc) install
-    
+    --with-pcre2 \
+    && make -j$(nproc) clean \
+    && make -j$(nproc) --debug \
+    && make -j$(nproc) install
+
 FROM stage004-build-libmodsecurity AS stage005-build-nginx
 
-RUN apt-get update && \
-    apt-get install --yes --no-install-recommends --no-install-suggests \
+RUN apt-get update \
+    && apt-get install --yes --no-install-recommends --no-install-suggests \
     libxml2-dev \
     libxslt1-dev \
     libgd-dev \
     libgoogle-perftools-dev \
-    libatomic-ops-dev && \
-    apt-get clean && \
-    rm --recursive --force /var/lib/apt/lists/*
+    libatomic-ops-dev \
+    && apt-get clean \
+    && rm --recursive --force /var/lib/apt/lists/*
 
-RUN cd /opt/nginx-1.22.0 && \
-    ./configure \
+RUN cd /opt/nginx-1.22.0 \
+    && ./configure \
     --prefix=/etc/nginx \
     --sbin-path=/usr/sbin/nginx \
     --modules-path=/etc/nginx/modules \
@@ -181,19 +214,19 @@ RUN cd /opt/nginx-1.22.0 && \
     --with-compat \
     --add-dynamic-module=/opt/ModSecurity-nginx \
     --add-dynamic-module=/opt/ngx_brotli/ \
-    --with-debug && \
-    make -j$(nproc) --debug && \
-    make -j$(nproc) install
-
+    --with-debug \
+    && make -j$(nproc) --debug \
+    && make -j$(nproc) install
+ 
 FROM stage005-build-nginx AS stage006-nginx-tuneup
 
-RUN apt-get update && \
-    apt-get install --yes --no-install-recommends --no-install-suggests \
+RUN apt-get update \
+    && apt-get install --yes --no-install-recommends --no-install-suggests \
     nano \
     procps \
-    binutils && \
-    apt-get clean && \
-    rm --recursive --force /var/lib/apt/lists/*
+    binutils \
+    && apt-get clean \
+    && rm --recursive --force /var/lib/apt/lists/*
 
 RUN strip --verbose --strip-unneeded /usr/local/lib/*.so.* \
     /usr/lib/x86_64-linux-gnu/*.so.* \
@@ -201,7 +234,7 @@ RUN strip --verbose --strip-unneeded /usr/local/lib/*.so.* \
     /lib/x86_64-linux-gnu/libexpat.so.1 \
     /usr/local/modsecurity/lib/libmodsecurity.so.3
 
-FROM  debian:11.4-slim AS stage007-nginx-production
+FROM  debian:$TAG AS stage007-nginx-production
 
 COPY --from=stage006-nginx-tuneup   /usr/local/lib/libpcre2-8.so.0	/usr/local/lib/libpcre2-8.so.0
 COPY --from=stage006-nginx-tuneup	/usr/local/lib/libz.so.1	/usr/local/lib/libz.so.1
@@ -257,32 +290,25 @@ COPY --from=stage006-nginx-tuneup	/usr/lib/x86_64-linux-gnu/libexslt.so.0	/usr/l
 COPY --from=stage006-nginx-tuneup	/usr/sbin/nginx /usr/sbin/nginx
 COPY --from=stage006-nginx-tuneup	/etc/nginx/modules/ /etc/nginx/modules/
 
-# default website configuration.
 COPY --chmod=444 config/nginx/ /etc/nginx/
 
-# symbolic link to enabled sites.
 RUN ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/
 
-# configurar vínculos del enlazador dinámico en tiempo de ejecución
 RUN ldconfig -v
 
-# default website permissions.
-RUN mkdir --parents --verbose --mode=750 /var/www/html/default/ && \
-    chown -R www-data:www-data /var/www/html/default/
+RUN mkdir --parents --verbose --mode=750 /var/www/html/default/ \
+    && chown -R www-data:www-data /var/www/html/default/
 
-# nginx server logs.
-RUN mkdir --parents --verbose --mode=640 /var/log/nginx/ && \
-    chown -R root:root /var/log/nginx/
+RUN mkdir --parents --verbose --mode=640 /var/log/nginx/ \
+    && chown -R root:root /var/log/nginx/
 
-# nginx cache directories.
 RUN mkdir --parents --verbose --mode=750 /var/cache/nginx/client_temp/ \
     /var/cache/nginx/proxy_temp/ \
     /var/cache/nginx/fastcgi_temp/ \
     /var/cache/nginx/uwsgi_temp/ \
-    /var/cache/nginx/scgi_temp/ && \
-    chown -R www-data:www-data /var/cache/nginx/
+    /var/cache/nginx/scgi_temp/ \
+    && chown -R www-data:www-data /var/cache/nginx/
 
-# modsecurity folders permissions.
 RUN mkdir --parents --verbose --mode=750 /opt/modsecurity/var \
     /opt/modsecurity/var/tmp
 
@@ -291,13 +317,12 @@ RUN mkdir --verbose --mode=700  /opt/modsecurity/var/audit \
     /opt/modsecurity/var/log \
     /opt/modsecurity/var/upload	
 
-# modesecurity folders ownership.
-RUN chown root:www-data /opt/modsecurity/var && \
-    chown www-data:root /opt/modsecurity/var/audit && \
-    chown www-data:root /opt/modsecurity/var/data && \
-    chown root:root /opt/modsecurity/var/log && \
-    chown www-data:www-data /opt/modsecurity/var/tmp && \
-    chown www-data:root /opt/modsecurity/var/upload
+RUN chown root:www-data /opt/modsecurity/var \
+    && chown www-data:root /opt/modsecurity/var/audit \
+    && chown www-data:root /opt/modsecurity/var/data \
+    && chown root:root /opt/modsecurity/var/log \
+    && chown www-data:www-data /opt/modsecurity/var/tmp \
+    && chown www-data:root /opt/modsecurity/var/upload
 
 RUN touch /var/log/nginx/access.log \
     /var/log/nginx/error.log \ 
