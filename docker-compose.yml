@@ -2,7 +2,7 @@ version: "3.8"
 services:
   limesurvey-ce:
     container_name: limesurvey-ce
-    image: bestrada23685/limesurvey-ce:3.28.23-220809
+    image: bestrada23685/limesurvey-ce:3.28.26-220829
     secrets:
       - limesurvey_db_pass
       - limesurvey_admin_pass
@@ -16,9 +16,12 @@ services:
       ADMIN_FULLNAME: Bakneer Estrada
       ADMIN_EMAIL: bakneer.estrada623@std.uni.edu.ni
     ports:
-      - "8080:80"
+      - "80:80"
     depends_on:
       - postgres-db
+    volumes:
+      - upload:/var/www/html/limesurvey/upload
+      - plugins:/var/www/html/limesurvey/plugins
   postgres-db:
     container_name: postgres
     image: postgres:12.12-bullseye
@@ -44,6 +47,8 @@ services:
       PGADMIN_DEFAULT_PASSWORD_FILE: /run/secrets/pgadmin_admin_pass
 volumes:
   db-data:
+  upload:
+  plugins:
 secrets:
   limesurvey_db_pass:
     file: ./secrets/limesurvey_db_pass.txt

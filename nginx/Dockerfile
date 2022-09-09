@@ -57,13 +57,13 @@ RUN wget --tries=10 --directory-prefix=/tmp/ https://nginx.org/download/nginx-1.
     && tar --gzip --extract --verbose --file=/tmp/nginx-1.22.0.tar.gz --directory=/opt/ \
     && rm --force /tmp/nginx-1.22.0.tar.gz
 
-RUN git clone https://github.com/google/ngx_brotli.git /opt/ngx_brotli/
+RUN git clone --progress --verbose --depth 1 https://github.com/google/ngx_brotli.git /opt/ngx_brotli/
 
-RUN git clone https://github.com/ssdeep-project/ssdeep.git /opt/ssdeep/
+RUN git clone --progress --verbose --depth 1 https://github.com/ssdeep-project/ssdeep.git /opt/ssdeep/
 
-RUN git clone --depth 1 -b v3/master --single-branch https://github.com/SpiderLabs/ModSecurity.git /opt/ModSecurity/
+RUN git clone --progress --verbose --depth 1 --branch v3/master --single-branch https://github.com/SpiderLabs/ModSecurity.git /opt/ModSecurity/
 
-RUN git clone --depth 1 https://github.com/SpiderLabs/ModSecurity-nginx.git /opt/ModSecurity-nginx
+RUN git clone --progress --verbose --depth 1 https://github.com/SpiderLabs/ModSecurity-nginx.git /opt/ModSecurity-nginx
 
 FROM stage001-download-dependencies AS stage002-install-development-tools
 

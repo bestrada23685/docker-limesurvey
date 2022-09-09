@@ -145,4 +145,6 @@ else
 	php application/commands/console.php install "$ADMIN_USERNAME" "$ADMIN_PASSWORD" "$ADMIN_FULLNAME" "$ADMIN_EMAIL" verbose
 fi
 
+php application/commands/console.php flushassets
+
 exec "$@"
