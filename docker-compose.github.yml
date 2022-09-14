@@ -1,17 +1,23 @@
 version: "3.8"
 services:
   limesurvey-ce:
-    container_name: limesurvey-ce
-    image: bestrada23685/limesurvey-ce:3.28.28-220912
+    image: bestrada23685/limesurvey-ce:${VERSION}-${BUILD}
+    build:
+      context: ./limesurvey-ce
+      dockerfile: Dockerfile.GitHub
+      args:
+        VERSION: ${VERSION}
+        BUILD: ${BUILD}
+    container_name: limesurvey-ce-github
     secrets:
       - limedb_pass
       - limeadmin_pass
     environment:
       DB_HOST: postgres-db
-      DB_NAME: limedb
-      DB_USERNAME: limeusrdb
+      DB_NAME: limedbdev
+      DB_USERNAME: limeusrdev
       DB_PASSWORD_FILE: /run/secrets/limedb_pass
-      ADMIN_USERNAME: bestrada623
+      ADMIN_USERNAME: bestrada623dev
       ADMIN_PASSWORD_FILE: /run/secrets/limeadmin_pass
       ADMIN_FULLNAME: Bakneer Estrada
       ADMIN_EMAIL: bakneer.estrada623@std.uni.edu.ni
@@ -28,9 +34,9 @@ services:
     secrets:
       - limedb_pass
     environment:
-      POSTGRES_USER: limeusrdb
+      POSTGRES_USER: limeusrdev
       POSTGRES_PASSWORD_FILE: /run/secrets/limedb_pass
-      POSTGRES_DB: limedb
+      POSTGRES_DB: limedbdev
     volumes:
       - db-data:/var/lib/postgresql/data
   pgadmin:
@@ -51,8 +57,8 @@ volumes:
   plugins:
 secrets:
   limedb_pass:
-    file: ./secrets/default/limedb_pass.txt
+    file: ./secrets/github/limedb_pass.txt
   limeadmin_pass:
-    file: ./secrets/default/limeadmin_pass.txt
+    file: ./secrets/github/limeadmin_pass.txt
   pgadmin_pass:
-    file: ./secrets/default/pgadmin_pass.txt
+    file: ./secrets/github/pgadmin_pass.txt

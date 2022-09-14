@@ -2,16 +2,16 @@ version: "3.8"
 services:
   limesurvey-ce:
     container_name: limesurvey-ce
-    image: bestrada23685/limesurvey-ce:3.28.28-220912
+    image: bestrada23685/limesurvey-ce:5.3.32-220817
     secrets:
       - limedb_pass
       - limeadmin_pass
     environment:
       DB_HOST: postgres-db
-      DB_NAME: limedb
-      DB_USERNAME: limeusrdb
+      DB_NAME: limedbpro5
+      DB_USERNAME: limeusrpro5
       DB_PASSWORD_FILE: /run/secrets/limedb_pass
-      ADMIN_USERNAME: bestrada623
+      ADMIN_USERNAME: bestrada623pro
       ADMIN_PASSWORD_FILE: /run/secrets/limeadmin_pass
       ADMIN_FULLNAME: Bakneer Estrada
       ADMIN_EMAIL: bakneer.estrada623@std.uni.edu.ni
@@ -28,9 +28,9 @@ services:
     secrets:
       - limedb_pass
     environment:
-      POSTGRES_USER: limeusrdb
+      POSTGRES_USER: limeusrpro5
       POSTGRES_PASSWORD_FILE: /run/secrets/limedb_pass
-      POSTGRES_DB: limedb
+      POSTGRES_DB: limedbpro5
     volumes:
       - db-data:/var/lib/postgresql/data
   pgadmin:
@@ -51,8 +51,8 @@ volumes:
   plugins:
 secrets:
   limedb_pass:
-    file: ./secrets/default/limedb_pass.txt
+    file: ./secrets/v5/pro/limedb_pass.txt
   limeadmin_pass:
-    file: ./secrets/default/limeadmin_pass.txt
+    file: ./secrets/v5/pro/limeadmin_pass.txt
   pgadmin_pass:
-    file: ./secrets/default/pgadmin_pass.txt
+    file: ./secrets/v5/pro/pgadmin_pass.txt
