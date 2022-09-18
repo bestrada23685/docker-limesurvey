@@ -1,0 +1,51 @@
+version: "3.8"
+services:
+  limesurvey-ce:
+    image: bestrada23685/limesurvey-ce:5.4.0-220913
+    container_name: limesurvey-ce-prov5
+    secrets:
+      - limedb_pass
+      - limeadmin_pass
+    env_file:
+      - ./config/.env
+    ports:
+      - "80:80"
+    depends_on:
+      - postgres-db
+    volumes:
+      - pro5-upload:/var/www/html/limesurvey/upload
+      - pro5-plugins:/var/www/html/limesurvey/plugins
+  postgres-db:
+    image: postgres:12.12-bullseye
+    container_name: postgres-db
+    secrets:
+      - limedb_pass
+    env_file:
+      - ./config/.env
+    volumes:
+      - dbpro5-data:/var/lib/postgresql/data
+  pgadmin4:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin4
+    secrets:
+      - pgadmin_pass
+    ports:
+      - "81:80"
+    depends_on:
+      - postgres-db
+    env_file:
+      - ./config/.env
+    volumes:
+      - ./config/pgadmin4/servers.json:/pgadmin4/servers.json
+      - ./config/pgadmin4/pgpass:/pgadmin4/pgpass
+secrets:
+  limedb_pass:
+    file: ./secrets/limedb_pass.txt
+  limeadmin_pass:
+    file: ./secrets/limeadmin_pass.txt
+  pgadmin_pass:
+    file: ./secrets/pgadmin_pass.txt
+volumes:
+  dbpro5-data:
+  pro5-upload:
+  pro5-plugins:
