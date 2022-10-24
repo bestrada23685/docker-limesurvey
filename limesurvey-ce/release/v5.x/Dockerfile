@@ -16,76 +16,40 @@
 #
 # Descripción: Dockerfile multi etapa para LimeSurvey Community Edition (CE).
 #
-#   - LimeSurvey Community Edition (CE): versión 5.4.1 release 220919 (latest-stable-release).
+#   - LimeSurvey Community Edition (CE): versión 5.4.7 release 221019 (latest-stable-release).
 #
 # GitHub URL: https://github.com/bestrada23685/docker-limesurvey/tree/master/limesurvey-ce
 # DockerHub URL: https://hub.docker.com/repository/docker/bestrada23685/limesurvey-ce 
 # 
-
-# >> Argumentos para la construcción de la imagen base.
-
-# 
-# Etiqueta de la imagen base Debian.
-#
 ARG TAG=11.4-slim
 
-#
-# [[FASE 1]]: Descargar fuentes de LimeSurvey Community Edition (CE).
-#
-FROM debian:$TAG AS stage001-download-dependencies
+FROM  debian:$TAG AS stage001
 
-# >> Argumento de construcción de la imagen.
+ARG VERSION=5.4.7
 
-#
-# Versión de LimeSurvey Community Edition (CE).
-#
-ARG VERSION=5.4.1
+ARG BUILD=221019
 
-#
-# Release de LimeSurvey Community Edition (CE).
-#
-ARG BUILD=220919
-
-# >> Variables de entorno.
-
-#
-# Nombre del archivo comprimido de LimeSurvey Community Edition (CE).
-#
 ENV RELEASE=${VERSION}+${BUILD}
 
-RUN apt-get update \
-    && apt-get install --yes --no-install-recommends --no-install-suggests \
-    ca-certificates \
-    wget \
-    unzip \
-    && apt-get clean \
+RUN set -eux; \
+    apt-get update \
+    && apt-get install --yes --no-install-recommends --show-progress \
+    ca-certificates=20210119 \
+    unzip=6.0-26+deb11u1 \
+    wget=1.21-1+deb11u1 \
     && rm --recursive --force /var/lib/apt/lists/*
-                                             
-RUN wget --tries=10 --directory-prefix=/tmp/ https://download.limesurvey.org/latest-stable-release/limesurvey${RELEASE}.zip \
+
+RUN set -eux; \
+    wget --verbose --tries=30 --timeout=60 --wait=5 --continue  --progress=bar:force:noscroll \
+    --show-progress --timestamping --directory=/tmp  https://download.limesurvey.org/latest-stable-release/limesurvey${RELEASE}.zip \
     && unzip /tmp/limesurvey${RELEASE}.zip -d /opt/ \
     && rm --force /tmp/limesurvey${RELEASE}.zip
 
-#
-# [[FASE 2]]: Imagen de producción para LimeSurvey Community Edition (CE).
-#  
-FROM bestrada23685/php:7.4.30-nginx AS stage001-limesurvey-v5-production
-
-RUN apt-get update \
-    && apt-get install --yes --no-install-recommends --no-install-suggests \
-    netcat \
-    && apt-get clean \
-    && rm --recursive --force /var/lib/apt/lists/*
-
-COPY --chmod=444 config/nginx /etc/nginx/
-
-RUN unlink /etc/nginx/sites-enabled/default.conf \
-    && chmod 600 /var/www/html/default/
-
-RUN ln -s /etc/nginx/sites-available/limesurvey.conf /etc/nginx/sites-enabled/
-
-COPY --from=stage001-download-dependencies --chown=www-data:www-data --chmod=750 /opt/limesurvey/ /var/www/html/limesurvey/
+FROM bestrada23685/webstack:ef4ac04 AS stage002
 
 COPY --chmod=775 config/docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+
+COPY --from=stage001 --chown=www-data:www-data --chmod=750 /opt/limesurvey /var/www/html/default.uni.edu.ni/
 
 ENTRYPOINT [ "/usr/local/bin/docker-entrypoint.sh" ]
 

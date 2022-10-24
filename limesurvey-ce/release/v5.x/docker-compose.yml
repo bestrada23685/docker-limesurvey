@@ -19,8 +19,8 @@ services:
     depends_on:
       - postgres-db
     volumes:
-      - limev5-upload:/var/www/html/limesurvey/upload
-      - limev5-plugins:/var/www/html/limesurvey/plugins
+      - limev5-upload:/var/www/html/default.uni.edu.ni/upload
+      - limev5-plugins:/var/www/html/default.uni.edu.ni/plugins
   postgres-db:
     image: postgres:12.12-bullseye
     container_name: postgres-db

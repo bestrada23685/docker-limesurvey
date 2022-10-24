@@ -27,7 +27,7 @@ fi
 
 if [ ! -z "$DB_PASSWORD_FILE" ]
 then
-  DB_PASSWORD="$(< "$DB_PASSWORD_FILE")"
+    DB_PASSWORD="$(< "$DB_PASSWORD_FILE")"
 fi
 
 if [ -z "$DB_PASSWORD" ]
@@ -59,11 +59,11 @@ do
     sleep 5
 done
 
-if [ -f /var/www/html/limesurvey/application/config/config.php ]
+if [ -f /var/www/html/default.uni.edu.ni/application/config/config.php ]
 then
     echo "[INFO]: config.php exists"
 else
-cat <<EOF >/var/www/html/limesurvey/application/config/config.php
+cat <<EOF >/var/www/html/default.uni.edu.ni/application/config/config.php
 <?php if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -130,11 +130,11 @@ return array(
 /* End of file config.php */
 /* Location: ./application/config/config.php */ 
 EOF
-chmod 444 "/var/www/html/limesurvey/application/config/config.php"
-chown "www-data:www-data" "/var/www/html/limesurvey/application/config/config.php"
+chmod 444 "/var/www/html/default.uni.edu.ni/application/config/config.php"
+chown "www-data:www-data" "/var/www/html/default.uni.edu.ni/application/config/config.php"
 fi
 
-cd /var/www/html/limesurvey/
+cd /var/www/html/default.uni.edu.ni/
 
 php application/commands/console.php updatedb
 
