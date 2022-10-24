@@ -45,7 +45,7 @@ RUN set -eux; \
     && unzip /tmp/limesurvey${RELEASE}.zip -d /opt/ \
     && rm --force /tmp/limesurvey${RELEASE}.zip
 
-FROM bestrada23685/webstack:ef4ac04 AS stage002
+FROM bestrada23685/webstack:81ac5c8 AS stage002
 
 COPY --chmod=775 config/docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
