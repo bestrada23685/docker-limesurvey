@@ -3,7 +3,7 @@
 # País: Nicaragua.
 # Universidad: Universidad Nacional de Ingeniería (UNI).
 # Recinto: Recinto Universitario Simón Bolivar (RUSB).
-# Facultad: Facultad de Electrotecnia y Computación.
+# Facultad: Facultad de Electrotecnia y Computación (FEC).
 # Carrera: Ingeniería en Computación.
 # Proyecto: Monografía / Análisis de competencias de investigación en universitarios del Programa Delfín - Capítulo Nicaragua.
 # Tutor: Will Johnny Flores Delgadillo.
