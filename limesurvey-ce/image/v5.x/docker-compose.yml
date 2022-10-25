@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   limesurvey-ce:
-    image: bestrada23685/limesurvey-ce:5.4.7-221019
+    image: bestrada23685/limesurvey-ce:5.4.8-221024
     container_name: limesurvey-ce-prov5
     secrets:
       - limedb_pass
