@@ -41,9 +41,9 @@ RUN set -eux; \
 
 RUN set -eux; \
     wget --verbose --tries=30 --timeout=60 --wait=5 --continue  --progress=bar:force:noscroll \
-    --show-progress --timestamping --directory=/tmp  https://download.limesurvey.org/latest-stable-release/limesurvey${RELEASE}.zip \
-    && unzip /tmp/limesurvey${RELEASE}.zip -d /opt/ \
-    && rm --force /tmp/limesurvey${RELEASE}.zip
+    --show-progress --timestamping --directory=/tmp "https://download.limesurvey.org/latest-stable-release/limesurvey${RELEASE}.zip" \
+    && unzip "/tmp/limesurvey${RELEASE}.zip" -d /opt/ \
+    && rm --force "/tmp/limesurvey${RELEASE}.zip"
 
 FROM bestrada23685/webstack:e2fe11b AS stage002
 
