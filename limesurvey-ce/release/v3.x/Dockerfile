@@ -25,9 +25,9 @@ ARG TAG=11.4-slim
 
 FROM  debian:$TAG AS stage001
 
-ARG VERSION=5.4.8
+ARG VERSION=3.28.35
 
-ARG BUILD=221024
+ARG BUILD=221025
 
 ENV RELEASE=${VERSION}+${BUILD}
 
@@ -41,11 +41,11 @@ RUN set -eux; \
 
 RUN set -eux; \
     wget --verbose --tries=30 --timeout=60 --wait=5 --continue  --progress=bar:force:noscroll \
-    --show-progress --timestamping --directory=/tmp "https://download.limesurvey.org/latest-stable-release/limesurvey${RELEASE}.zip" \
+    --show-progress --timestamping --directory=/tmp "https://download.limesurvey.org/lts-releases/limesurvey${RELEASE}.zip" \
     && unzip "/tmp/limesurvey${RELEASE}.zip" -d /opt/ \
     && rm --force "/tmp/limesurvey${RELEASE}.zip"
 
-FROM bestrada23685/phpstack:8.1.11 AS stage002
+FROM bestrada23685/phpstack:7.4.32 AS stage002
 
 COPY --chmod=775 config/docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 

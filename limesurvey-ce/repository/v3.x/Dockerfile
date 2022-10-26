@@ -16,7 +16,7 @@
 #
 # Descripción: Dockerfile multi etapa para LimeSurvey Community Edition (CE).
 #
-#   - LimeSurvey Community Edition (CE): versión 5.4.7 release 221019 (latest-stable-release).
+#   - LimeSurvey Community Edition (CE): versión 3.28.34 release 221021 - From GitHub.
 #
 # GitHub URL: https://github.com/bestrada23685/docker-limesurvey/tree/master/limesurvey-ce
 # DockerHub URL: https://hub.docker.com/repository/docker/bestrada23685/limesurvey-ce 
@@ -25,31 +25,36 @@ ARG TAG=11.4-slim
 
 FROM  debian:$TAG AS stage001
 
-ARG VERSION=5.4.8
+ARG VERSION=3.28.34
 
-ARG BUILD=221024
+ARG BUILD=221021
 
-ENV RELEASE=${VERSION}+${BUILD}
+ENV FILE_NAME=${VERSION}+${BUILD}
 
 RUN set -eux; \
     apt-get update \
     && apt-get install --yes --no-install-recommends --show-progress \
     ca-certificates=20210119 \
-    unzip=6.0-26+deb11u1 \
     wget=1.21-1+deb11u1 \
     && rm --recursive --force /var/lib/apt/lists/*
 
 RUN set -eux; \
     wget --verbose --tries=30 --timeout=60 --wait=5 --continue  --progress=bar:force:noscroll \
-    --show-progress --timestamping --directory=/tmp "https://download.limesurvey.org/latest-stable-release/limesurvey${RELEASE}.zip" \
-    && unzip "/tmp/limesurvey${RELEASE}.zip" -d /opt/ \
-    && rm --force "/tmp/limesurvey${RELEASE}.zip"
+    --show-progress --timestamping --directory=/tmp  "https://github.com/LimeSurvey/LimeSurvey/archive/refs/tags/${FILE_NAME}.tar.gz" \
+    && tar --gzip --extract --verbose --file="/tmp/${FILE_NAME}.tar.gz" --directory=/opt/ \
+    && rm --force "/tmp/${FILE_NAME}.tar.gz"
 
-FROM bestrada23685/phpstack:8.1.11 AS stage002
+FROM bestrada23685/phpstack:7.4.32 AS stage002
+
+ARG VERSION=3.28.34
+
+ARG BUILD=221021
+
+ENV DIR_NAME=${VERSION}-${BUILD}
 
 COPY --chmod=775 config/docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
-COPY --from=stage001 --chown=www-data:www-data --chmod=750 /opt/limesurvey /var/www/html/default.uni.edu.ni/
+COPY --from=stage001 --chown=www-data:www-data --chmod=750 /opt/LimeSurvey-${DIR_NAME}/ /var/www/html/default.uni.edu.ni/
 
 ENTRYPOINT [ "/usr/local/bin/docker-entrypoint.sh" ]
 
