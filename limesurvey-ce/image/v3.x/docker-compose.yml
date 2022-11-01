@@ -30,27 +30,11 @@ services:
       - "5432:5432"
     volumes:
       - dbpro3-data:/var/lib/postgresql/data
-  pgadmin4:
-    image: dpage/pgadmin4:latest
-    container_name: pgadmin4
-    secrets:
-      - pgadmin_pass
-    ports:
-      - "81:80"
-    depends_on:
-      - postgres-db
-    env_file:
-      - ./config/.env
-    volumes:
-      - ./config/pgadmin4/servers.json:/pgadmin4/servers.json
-      - ./config/pgadmin4/pgpass:/pgadmin4/pgpass
 secrets:
   limedb_pass:
     file: ./secrets/limedb_pass.txt
   limeadmin_pass:
     file: ./secrets/limeadmin_pass.txt
-  pgadmin_pass:
-    file: ./secrets/pgadmin_pass.txt
 volumes:
   dbpro3-data:
   pro3-upload:
