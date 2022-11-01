@@ -1,7 +1,11 @@
 version: "3.8"
 services:
   limesurvey-ce:
-    image: bestrada23685/limesurvey-ce:5.4.8-221024
+    image: bestrada23685/limesurvey-ce:${VERSION}-${BUILD}
+    build:
+      args:
+        VERSION: ${VERSION}
+        BUILD: ${BUILD}
     container_name: limesurvey-ce-prov5
     secrets:
       - limedb_pass
