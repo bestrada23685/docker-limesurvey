@@ -44,7 +44,7 @@ RUN set -eux; \
     && tar --gzip --extract --verbose --file="/tmp/${FILE_NAME}.tar.gz" --directory=/opt/ \
     && rm --force "/tmp/${FILE_NAME}.tar.gz"
 
-FROM bestrada23685/phpstack:8.1.11 AS stage002
+FROM bestrada23685/phpstack:8.1.12 AS stage002
 
 ARG VERSION=5.4.7
 
