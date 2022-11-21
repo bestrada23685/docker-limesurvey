@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   limesurvey-ce:
-    image: bestrada23685/limesurvey-ce:5.4.11-221114
+    image: bestrada23685/limesurvey-ce:5.4.12-221121
     secrets:
       - limedb_pass
       - limeadmin_pass
