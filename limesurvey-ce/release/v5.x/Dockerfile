@@ -21,7 +21,7 @@
 # GitHub URL: https://github.com/bestrada23685/docker-limesurvey/tree/master/limesurvey-ce
 # DockerHub URL: https://hub.docker.com/repository/docker/bestrada23685/limesurvey-ce 
 # 
-ARG TAG=11.4-slim
+ARG TAG=11.5-slim
 
 FROM  debian:$TAG AS stage001
 
