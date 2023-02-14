@@ -16,7 +16,7 @@
 #
 # Descripción: Dockerfile multi etapa para LimeSurvey Community Edition (CE).
 #
-#   - LimeSurvey Community Edition (CE): versión 5.4.11 release 221114 - From GitHub.
+#   - LimeSurvey Community Edition (CE): versión 5.6.3 release 230130 - From GitHub.
 #
 # GitHub URL: https://github.com/bestrada23685/docker-limesurvey/tree/master/limesurvey-ce
 # DockerHub URL: https://hub.docker.com/repository/docker/bestrada23685/limesurvey-ce 
@@ -25,9 +25,9 @@ ARG TAG=11.5-slim
 
 FROM  debian:$TAG AS stage001
 
-ARG VERSION=5.4.11
+ARG VERSION=5.6.3
 
-ARG BUILD=221114
+ARG BUILD=230130
 
 ENV FILE_NAME=${VERSION}+${BUILD}
 
@@ -46,9 +46,9 @@ RUN set -eux; \
 
 FROM bestrada23685/phpstack:8.1.13 AS stage002
 
-ARG VERSION=5.4.11
+ARG VERSION=5.6.3
 
-ARG BUILD=221114
+ARG BUILD=230130
 
 ENV DIR_NAME=${VERSION}-${BUILD}
 
