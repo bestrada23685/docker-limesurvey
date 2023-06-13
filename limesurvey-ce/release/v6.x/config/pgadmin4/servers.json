@@ -1,0 +1,14 @@
+{
+    "Servers": {
+        "1": {
+            "Name": "postgres-db-v5",
+            "Group": "Servers",
+            "Host": "postgres-db",
+            "Port": 5432,
+            "MaintenanceDB": "limedbv5",
+            "Username": "limeusrv5",
+            "PassFile": "/pgpass",
+            "SSLMode": "prefer"
+        }
+    }
+}

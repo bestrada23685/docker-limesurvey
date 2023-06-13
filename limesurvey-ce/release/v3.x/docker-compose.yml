@@ -22,7 +22,7 @@ services:
       - limev3-upload:/var/www/html/limesurvey/upload
       - limev3-plugins:/var/www/html/limesurvey/plugins
   postgres-db:
-    image: postgres:12.12-bullseye
+    image: postgres:15.3-bullseye
     container_name: postgres-db
     secrets:
       - limedb_pass

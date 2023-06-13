@@ -15,7 +15,7 @@ services:
       - upload:/var/www/html/limesurvey/upload
       - plugins:/var/www/html/limesurvey/plugins
   postgres-db:
-    image: postgres:12.12-bullseye
+    image: postgres:15.3-bullseye
     secrets:
       - limedb_pass
     env_file:

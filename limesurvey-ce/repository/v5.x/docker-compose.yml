@@ -22,7 +22,7 @@ services:
       - dev5-upload:/var/www/html/limesurvey/upload
       - dev5-plugins:/var/www/html/limesurvey/plugins
   postgres-db:
-    image: postgres:12.12-bullseye
+    image: postgres:15.3-bullseye
     container_name: postgres-db
     secrets:
       - limedb_pass

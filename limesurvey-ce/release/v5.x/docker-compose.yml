@@ -22,7 +22,7 @@ services:
       - limev5-upload:/var/www/html/default.uni.edu.ni/upload
       - limev5-plugins:/var/www/html/default.uni.edu.ni/plugins
   postgres-db:
-    image: postgres:12.12-bullseye
+    image: postgres:15.3-bullseye
     container_name: postgres-db
     secrets:
       - limedb_pass

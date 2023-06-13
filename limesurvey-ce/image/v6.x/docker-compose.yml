@@ -6,7 +6,7 @@ services:
       args:
         VERSION: ${VERSION}
         BUILD: ${BUILD}
-    container_name: limesurvey-ce-prov5
+    container_name: limesurvey-ce-prov6
     secrets:
       - limedb_pass
       - limeadmin_pass
@@ -17,8 +17,8 @@ services:
     depends_on:
       - postgres-db
     volumes:
-      - pro5-upload:/var/www/html/default.uni.edu.ni/upload
-      - pro5-plugins:/var/www/html/default.uni.edu.ni/plugins
+      - pro6-upload:/var/www/html/default.uni.edu.ni/upload
+      - pro6-plugins:/var/www/html/default.uni.edu.ni/plugins
   postgres-db:
     image: postgres:15.3-bullseye
     container_name: postgres-db
@@ -29,13 +29,13 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - dbpro5-data:/var/lib/postgresql/data
+      - dbpro6-data:/var/lib/postgresql/data
 secrets:
   limedb_pass:
     file: ./secrets/limedb_pass.txt
   limeadmin_pass:
     file: ./secrets/limeadmin_pass.txt
 volumes:
-  dbpro5-data:
-  pro5-upload:
-  pro5-plugins:
+  dbpro6-data:
+  pro6-upload:
+  pro6-plugins:

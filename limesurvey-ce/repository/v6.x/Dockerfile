@@ -10,24 +10,24 @@
 # Autor: Bakneer Nahúm Estrada Gutiérrez.
 # Carnet: 2006-23685.
 # Correo: bakneer.estrada623@std.uni.edu.ni 
-# Fecha: 01/09/2022.
+# Fecha: 12/06/2023.
 # URL: https://www.uni.edu.ni/#/somos 
 #      https://uol.uni.edu.ni/
 #
 # Descripción: Dockerfile multi etapa para LimeSurvey Community Edition (CE).
 #
-#   - LimeSurvey Community Edition (CE): versión 5.6.25 release 230605 - From GitHub.
+#   - LimeSurvey Community Edition (CE): versión 6.1.2 release 230606 - From GitHub.
 #
 # GitHub URL: https://github.com/bestrada23685/docker-limesurvey/tree/master/limesurvey-ce
 # DockerHub URL: https://hub.docker.com/repository/docker/bestrada23685/limesurvey-ce 
 # 
 ARG TAG=11.7-slim
 
-FROM  debian:$TAG AS stage001
+FROM debian:$TAG AS stage001
 
-ARG VERSION=5.6.25
+ARG VERSION=6.1.2
 
-ARG BUILD=230605
+ARG BUILD=230606
 
 ENV FILE_NAME=${VERSION}+${BUILD}
 
@@ -46,9 +46,9 @@ RUN set -eux; \
 
 FROM bestrada23685/phpstack:8.1.13 AS stage002
 
-ARG VERSION=5.6.25
+ARG VERSION=6.1.2
 
-ARG BUILD=230605
+ARG BUILD=230606
 
 ENV DIR_NAME=${VERSION}-${BUILD}
 

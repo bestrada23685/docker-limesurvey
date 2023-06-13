@@ -8,7 +8,7 @@ services:
       args:
         VERSION: ${VERSION}
         BUILD: ${BUILD}
-    container_name: limesurvey-ce-v3-github
+    container_name: limesurvey-ce-v6
     secrets:
       - limedb_pass
       - limeadmin_pass
@@ -19,8 +19,8 @@ services:
     depends_on:
       - postgres-db
     volumes:
-      - dev3-upload:/var/www/html/limesurvey/upload
-      - dev3-plugins:/var/www/html/limesurvey/plugins
+      - limev6-upload:/var/www/html/default.uni.edu.ni/upload
+      - limev6-plugins:/var/www/html/default.uni.edu.ni/plugins
   postgres-db:
     image: postgres:15.3-bullseye
     container_name: postgres-db
@@ -29,7 +29,7 @@ services:
     env_file:
       - ./config/.env
     volumes:
-      - dbdev3-data:/var/lib/postgresql/data
+      - dbv6-data:/var/lib/postgresql/data
   pgadmin4:
     image: dpage/pgadmin4:latest
     container_name: pgadmin4
@@ -52,6 +52,6 @@ secrets:
   pgadmin_pass:
     file: ./secrets/pgadmin_pass.txt
 volumes:
-  dbdev3-data:
-  dev3-upload:
-  dev3-plugins:
+  dbv6-data:
+  limev6-upload:
+  limev6-plugins:
