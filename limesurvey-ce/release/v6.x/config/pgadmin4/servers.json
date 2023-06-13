@@ -1,12 +1,12 @@
 {
     "Servers": {
         "1": {
-            "Name": "postgres-db-v5",
+            "Name": "postgres-db-v6",
             "Group": "Servers",
             "Host": "postgres-db",
             "Port": 5432,
-            "MaintenanceDB": "limedbv5",
-            "Username": "limeusrv5",
+            "MaintenanceDB": "limedbv6",
+            "Username": "limeusrv6",
             "PassFile": "/pgpass",
             "SSLMode": "prefer"
         }
