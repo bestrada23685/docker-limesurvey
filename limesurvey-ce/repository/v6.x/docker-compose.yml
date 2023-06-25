@@ -10,8 +10,8 @@ services:
         BUILD: ${BUILD}
     container_name: limesurvey-ce-v6-github
     secrets:
-      - limedb_pass
-      - limeadmin_pass
+      - limedb6_pass
+      - limeadmin6_pass
     env_file:
       - ./config/.env
     ports:
@@ -25,7 +25,7 @@ services:
     image: postgres:15.3-bullseye
     container_name: postgres-db
     secrets:
-      - limedb_pass
+      - limedb6_pass
     env_file:
       - ./config/.env
     volumes:
@@ -34,7 +34,7 @@ services:
     image: dpage/pgadmin4:latest
     container_name: pgadmin4
     secrets:
-      - pgadmin_pass
+      - pgadmin6_pass
     ports:
       - "81:80"
     depends_on:
@@ -45,12 +45,12 @@ services:
       - ./config/pgadmin4/servers.json:/pgadmin4/servers.json
       - ./config/pgadmin4/pgpass:/pgadmin4/pgpass
 secrets:
-  limedb_pass:
-    file: ./secrets/limedb_pass.txt
-  limeadmin_pass:
-    file: ./secrets/limeadmin_pass.txt
-  pgadmin_pass:
-    file: ./secrets/pgadmin_pass.txt
+  limedb6_pass:
+    file: ./secrets/limedb6_pass.txt
+  limeadmin6_pass:
+    file: ./secrets/limeadmin6_pass.txt
+  pgadmin6_pass:
+    file: ./secrets/pgadmin6_pass.txt
 volumes:
   dbdev6-data:
   dev6-upload:

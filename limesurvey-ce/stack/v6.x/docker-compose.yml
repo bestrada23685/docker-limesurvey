@@ -1,10 +1,10 @@
 version: "3.8"
 services:
   limesurvey-ce:
-    image: bestrada23685/limesurvey-ce:6.1.3-230612
+    image: bestrada23685/limesurvey-ce:6.1.4-230620
     secrets:
-      - limedb_pass
-      - limeadmin_pass
+      - limedb6_pass
+      - limeadmin6_pass
     env_file:
       - ./config/.env
     ports:
@@ -12,24 +12,24 @@ services:
     depends_on:
       - postgres-db
     volumes:
-      - upload:/var/www/html/default.uni.edu.ni/upload
-      - plugins:/var/www/html/default.uni.edu.ni/plugins
+      - upload6:/var/www/html/default.uni.edu.ni/upload
+      - plugins6:/var/www/html/default.uni.edu.ni/plugins
   postgres-db:
     image: postgres:15.3-bullseye
     secrets:
-      - limedb_pass
+      - limedb6_pass
     env_file:
       - ./config/.env
     ports:
       - "5432:5432"
     volumes:
-      - data:/var/lib/postgresql/data
+      - data6:/var/lib/postgresql/data
 secrets:
-  limedb_pass:
+  limedb6_pass:
     external: true
-  limeadmin_pass:
+  limeadmin6_pass:
     external: true
 volumes:
-  data:
-  upload:
-  plugins:
+  data6:
+  upload6:
+  plugins6:
